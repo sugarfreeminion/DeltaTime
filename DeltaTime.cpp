@@ -117,8 +117,9 @@ int main(int argc, char *argv[])
             initTotalSeconds = ConvertToSeconds(initTime);
             finalTotalSeconds = ConvertToSeconds(finalTime);
 
-            cout << "    " << initTime;
-            cout << "    " << finalTime << endl;
+            cout << "   Initial Time: " << initTime;
+            cout << "   Final Time: " << finalTime << endl;
+            cout << "   Delta Time: " << abs(initTotalSeconds - finalTotalSeconds) << endl;           
         }
     }
     else
