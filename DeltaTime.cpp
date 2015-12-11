@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -40,9 +41,9 @@ void ParseInput(string input, string &initTime, string &finalTime)
  * Function Name:   ConvertToSeconds
  * Description:     converts time in HH:MM:SS format to total seconds
  */
-unsigned int ConvertToSeconds(string time)
+int ConvertToSeconds(string time)
 {
-    unsigned int totalSeconds = 0;
+    int totalSeconds = 0;
     unsigned int index = 0;
 
     unsigned int prevDelimiter = 0;
@@ -67,7 +68,7 @@ unsigned int ConvertToSeconds(string time)
 
             if(foundHour == false)
             {
-                totalSeconds = totalSeconds + (60 * atoi(time.substr(prevDelimiter,hmsLength).c_str()));
+                totalSeconds = totalSeconds + (60 * 60 * atoi(time.substr(prevDelimiter,hmsLength).c_str()));
 
                 foundHour = true;
             }
@@ -89,9 +90,26 @@ unsigned int ConvertToSeconds(string time)
         ++index;
     }
 
-    cout << "       Total Seconds: " << totalSeconds << endl;
+    //cout << "       Total Seconds: " << totalSeconds << endl;
 
     return totalSeconds;
+}
+
+/*
+ * Function Name:   SecondsToHMS
+ * Description:     converts total seconds to hms
+ */
+void SecondsToHMS(int totalSec, int &hour, int &min, int &sec)
+{
+    hour = totalSec / (60*60);
+
+    totalSec = totalSec - (hour*60*60);
+
+    min = totalSec / 60;
+
+    totalSec = totalSec - (min*60);
+
+    sec = totalSec;
 }
 
 int main(int argc, char *argv[])
@@ -107,19 +125,26 @@ int main(int argc, char *argv[])
             string initTime;
             string finalTime;
 
-            unsigned int initTotalSeconds = 0;
-            unsigned int finalTotalSeconds = 0;
+            int initTotalSeconds = 0;
+            int finalTotalSeconds = 0;
+            int deltaHour = 0;
+            int deltaMin = 0;
+            int deltaSec = 0;
 
-            cout << "Input from file: " << input << endl;
+            //cout << "Input from file: " << input << endl;
 
             ParseInput(input,initTime,finalTime);
 
             initTotalSeconds = ConvertToSeconds(initTime);
             finalTotalSeconds = ConvertToSeconds(finalTime);
+            SecondsToHMS(abs(initTotalSeconds - finalTotalSeconds),deltaHour,deltaMin,deltaSec);
 
-            cout << "   Initial Time: " << initTime;
-            cout << "   Final Time: " << finalTime << endl;
-            cout << "   Delta Time: " << abs(initTotalSeconds - finalTotalSeconds) << endl;           
+            //cout << "   Initial Time: " << initTime;
+            //cout << "   Final Time: " << finalTime << endl;
+            //cout << "   Delta Time: " << abs(initTotalSeconds - finalTotalSeconds) << endl;    
+            //cout << "DELTA TIME:" << endl;
+            cout << setw(2) << setfill('0') << deltaHour << ":" << setw(2) << setfill('0') << deltaMin << ":" << setw(2) << setfill('0') << deltaSec << endl;
+            //cout << "   Delta Hour: " << deltaHour << " Delta Min: " << deltaMin << " Delta Sec: " << deltaSec << endl;
         }
     }
     else
